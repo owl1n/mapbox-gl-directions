@@ -12,9 +12,11 @@ const initialState = {
   placeholderOrigin: 'Choose a starting place',
   placeholderDestination: 'Choose destination',
   zoom: 16,
+  language: 'ru',
   compile: null,
   proximity: false,
   styles: [],
+  suggestions: true,
 
   // UI controls
   controls: {

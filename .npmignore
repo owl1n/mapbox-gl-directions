@@ -1,2 +1,5 @@
 env.test.sh
 node_modules/
+src
+test
+example

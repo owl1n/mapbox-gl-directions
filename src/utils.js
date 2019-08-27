@@ -2,6 +2,28 @@ function validCoords(coords) {
   return coords[0] >= -180 && coords[0] <= 180 && coords[1] >= -90 && coords[1] <= 90;
 }
 
+function plural(number, one, two, five, isShowNumber = true) {
+  let n = Math.abs(number);
+  n %= 100;
+
+  const quantity = isShowNumber ? number : '';
+
+  if (n >= 5 && n <= 20) {
+    return `${quantity} ${five}`;
+  }
+
+  n %= 10;
+  if (n === 1) {
+    return `${quantity} ${one}`;
+  }
+
+  if (n >= 2 && n <= 4) {
+    return `${quantity} ${two}`;
+  }
+
+  return `${quantity} ${five}`;
+}
+
 function coordinateMatch(a, b) {
   a = a.geometry.coordinates;
   b = b.geometry.coordinates;
@@ -42,8 +64,8 @@ const format = {
     s %= 60;
     m %= 60;
     if (h === 0 && m === 0) return s + 's';
-    if (h === 0) return m + 'min';
-    return h + 'h ' + m + 'min';
+    if (h === 0) return plural(m, 'минута', 'минуты', 'минут');
+    return `${plural(h, 'час', 'часа', 'часов')} ${plural(m, 'минута', 'минуты', 'минут')}`;
   },
 
   imperial(m) {
@@ -55,10 +77,11 @@ const format = {
   },
 
   metric(m) {
-    if (m >= 100000) return (m / 1000).toFixed(0) + 'km';
-    if (m >= 10000) return (m / 1000).toFixed(1) + 'km';
-    if (m >= 100) return (m / 1000).toFixed(2) + 'km';
-    return m.toFixed(0) + 'm';
+    const plurIt = (value) => plural(value, 'километр', 'километра', 'километров');
+    if (m >= 100000) return plurIt((m / 1000).toFixed(0));
+    if (m >= 10000) return  plurIt((m / 1000).toFixed(1));
+    if (m >= 100) return plurIt((m / 1000).toFixed(2));
+    return plural(m.toFixed(0), 'метр', 'метра', 'метров');
   }
 };
 
